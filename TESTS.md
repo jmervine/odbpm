@@ -22,16 +22,7 @@ Total: 4 Passed: 4 Failed: 0 Duration: 0 Seconds
 7. [refute_equal] _configure: comments do not set config passed
 
 
-Total: 7 Passed: 7 Failed: 0 Duration: 1 Seconds
-
-(Running ./test/unit_deps.sh from: /home/jmervine/Development/odbpm)
-
-1. [refute] _deps_set: without deps passed
-2. [assert] _deps_fetch: returns true passed
-3. [assert] _deps_set: with deps passed
-
-
-Total: 3 Passed: 3 Failed: 0 Duration: 0 Seconds
+Total: 7 Passed: 7 Failed: 0 Duration: 0 Seconds
 
 (Running ./test/unit_fetch.sh from: /home/jmervine/Development/odbpm)
 
@@ -49,7 +40,7 @@ Total: 3 Passed: 3 Failed: 0 Duration: 0 Seconds
 12. [assert_stderr] _fetch_repo: fail on bad repo passed
 
 
-Total: 12 Passed: 12 Failed: 0 Duration: 3 Seconds
+Total: 12 Passed: 12 Failed: 0 Duration: 4 Seconds
 
 (Running ./test/unit_install.sh from: /home/jmervine/Development/odbpm)
 
@@ -77,6 +68,6 @@ Total: 9 Passed: 9 Failed: 0 Duration: 0 Seconds
 7. [assert_dir] _make_local: link passed
 
 
-Total: 7 Passed: 7 Failed: 0 Duration: 1 Seconds
+Total: 7 Passed: 7 Failed: 0 Duration: 0 Seconds
 
 ```

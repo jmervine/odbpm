@@ -9,11 +9,12 @@ This is currently in an aplha state. It's only been tested with a test repo on a
 TODO:
 - uninstall not implemented
 - global install not tested
-- some method of globally sourcing dependancies, commenting out dependancy functionality (which is untested anyway) until this is done
 - messaging or method RE including `~/.bin` to PATH
 
 Roadmap:
 - registry of some kind
+- dependancy handling
+- method of globally sourcing dependancies
 
 ## Installation
 
@@ -44,7 +45,6 @@ Your `package.conf` configuration file should contain the follow three entries;
 
 ``` bash
 package:      shunt     # package name
-dependancies: odb/shml  # dependancy packages
 main:         shunt.sh  # main source file
 bin:          shunt.sh  # executable link to main
                         # Without bin, no link will be created.

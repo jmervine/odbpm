@@ -36,7 +36,6 @@ TESTS.md: .PHONY
 	@echo '```' >> TESTS.md
 	@$(shunt_cmd) --plain ./test/unit_args.sh    | tee -a ./TESTS.md
 	@$(shunt_cmd) --plain ./test/unit_config.sh  | tee -a ./TESTS.md
-	@$(shunt_cmd) --plain ./test/unit_deps.sh    | tee -a ./TESTS.md
 	@$(shunt_cmd) --plain ./test/unit_fetch.sh   | tee -a ./TESTS.md
 	@$(shunt_cmd) --plain ./test/unit_install.sh | tee -a ./TESTS.md
 	@$(shunt_cmd) --plain ./test/unit_utils.sh   | tee -a ./TESTS.md
