@@ -24,11 +24,16 @@ test/clean:
 test/shunt.sh:
 	cd test && curl -L https://raw.github.com/odb/shunt/master/install.sh | bash -s local
 
-install:
+install: ensure_root
 	cp -v ./odbpm /usr/local/bin/odbpm
 
-uninstall:
-	rm -v /usr/local/bin/odbpm
+uninstall: ensure_root
+	rm -vf /usr/local/bin/odbpm
+
+update: uninstall install
+
+ensure_root:
+	@if [ "$$(id -u)" = "0" ]; then return 0; else echo "ERROR: Requires root."; return 1; fi
 
 TESTS.md: .PHONY
 	@echo "# Unit Test Output" > ./TESTS.md

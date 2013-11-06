@@ -22,7 +22,7 @@ Total: 4 Passed: 4 Failed: 0 Duration: 0 Seconds
 7. [refute_equal] _configure: comments do not set config passed
 
 
-Total: 7 Passed: 7 Failed: 0 Duration: 0 Seconds
+Total: 7 Passed: 7 Failed: 0 Duration: 1 Seconds
 
 (Running ./test/unit_fetch.sh from: /home/jmervine/Development/odbpm)
 
