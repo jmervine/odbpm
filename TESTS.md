@@ -22,7 +22,7 @@ Total: 4 Passed: 4 Failed: 0 Duration: 0 Seconds
 7. [refute_equal] _configure: comments do not set config passed
 
 
-Total: 7 Passed: 7 Failed: 0 Duration: 1 Seconds
+Total: 7 Passed: 7 Failed: 0 Duration: 0 Seconds
 
 (Running ./test/unit_fetch.sh from: /home/jmervine/Development/odbpm)
 
@@ -56,6 +56,16 @@ Total: 12 Passed: 12 Failed: 0 Duration: 4 Seconds
 
 
 Total: 9 Passed: 9 Failed: 0 Duration: 0 Seconds
+
+(Running ./test/unit_uninstall.sh from: /home/jmervine/Development/odbpm)
+
+1. [assert] _uninstall: return successful passed
+2. [refute_dir] _uninstall: remove lib dir passed
+3. [refute_file] _uninstall: remove bin link passed
+4. [refute_link] _uninstall: remove bin link passed
+
+
+Total: 4 Passed: 4 Failed: 0 Duration: 0 Seconds
 
 (Running ./test/unit_utils.sh from: /home/jmervine/Development/odbpm)
 

@@ -4,11 +4,20 @@
 ################################################################################
 
 _args_parse # Parse command line arguments.
-_fetch_repo # Fetch package repository.
-_install    # Install fetched package.
-if ! ${config[keep_tmp]}; then
-  _fetch_cleanup # Remove package temp.
-fi
+
+case "${config[action]}" in
+  install)
+    _fetch_repo # Fetch package repository.
+    _install    # Install fetched package.
+    if ! ${config[keep_tmp]}; then
+      _fetch_cleanup # Remove package temp.
+    fi
+    ;;
+  uninstall)
+    _uninstall;; # Uninstall
+  *)
+    _args_usage
+esac
 
 ################################################################################
 # vim: ft=sh:

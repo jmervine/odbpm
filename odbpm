@@ -192,6 +192,38 @@ function _install {
 }
 
 
+# Uninstall Functions
+# file: ./lib/_uninstall.sh
+################################################################################
+function _uninstall {
+  local repo="${config[repo]}"
+  local lib="${config[${config[method]}]}"
+  local bin="${config["${config[method]}_bin"]}"
+  if [ "${config[method]}" != "global" ]; then
+    lib="`pwd`/$lib"
+  fi
+  _message "Removing $repo:"
+  if test -d $lib/$repo; then
+    _configure "$lib/$repo/package.conf"
+    _message " -> $lib/$repo"
+    rm -rf $lib/$repo
+  else
+    repo="`echo $repo | awk -F'/' '{ print $2 }' | xargs`"
+    if test -d $lib/$repo; then
+      _configure "$lib/$repo/package.conf"
+      _message " -> $lib/$repo"
+      rm -rf $lib/$repo
+    else
+      _echoerr "Couldn't find anything to remove."
+      exit 1
+    fi
+  fi
+  if test "${config[bin]}"; then
+    _message " -> $bin/${config[bin]}"
+    rm -f "$bin/${config[bin]}"
+  fi
+}
+
 # Util Functions
 # file: ./lib/_utils.sh
 ################################################################################
@@ -208,11 +240,20 @@ function _make_local {
 ################################################################################
 
 _args_parse # Parse command line arguments.
-_fetch_repo # Fetch package repository.
-_install    # Install fetched package.
-if ! ${config[keep_tmp]}; then
-  _fetch_cleanup # Remove package temp.
-fi
+
+case "${config[action]}" in
+  install)
+    _fetch_repo # Fetch package repository.
+    _install    # Install fetched package.
+    if ! ${config[keep_tmp]}; then
+      _fetch_cleanup # Remove package temp.
+    fi
+    ;;
+  uninstall)
+    _uninstall;; # Uninstall
+  *)
+    _args_usage
+esac
 
 ################################################################################
 # vim: ft=sh:

@@ -39,11 +39,12 @@ TESTS.md: .PHONY
 	@echo "# Unit Test Output" > ./TESTS.md
 	@echo '' >> TESTS.md
 	@echo '```' >> TESTS.md
-	@$(shunt_cmd) --plain ./test/unit_args.sh    | tee -a ./TESTS.md
-	@$(shunt_cmd) --plain ./test/unit_config.sh  | tee -a ./TESTS.md
-	@$(shunt_cmd) --plain ./test/unit_fetch.sh   | tee -a ./TESTS.md
-	@$(shunt_cmd) --plain ./test/unit_install.sh | tee -a ./TESTS.md
-	@$(shunt_cmd) --plain ./test/unit_utils.sh   | tee -a ./TESTS.md
+	@$(shunt_cmd) --plain ./test/unit_args.sh      | tee -a ./TESTS.md
+	@$(shunt_cmd) --plain ./test/unit_config.sh    | tee -a ./TESTS.md
+	@$(shunt_cmd) --plain ./test/unit_fetch.sh     | tee -a ./TESTS.md
+	@$(shunt_cmd) --plain ./test/unit_install.sh   | tee -a ./TESTS.md
+	@$(shunt_cmd) --plain ./test/unit_uninstall.sh | tee -a ./TESTS.md
+	@$(shunt_cmd) --plain ./test/unit_utils.sh     | tee -a ./TESTS.md
 	@echo '```' >> TESTS.md
 
 .PHONY:
