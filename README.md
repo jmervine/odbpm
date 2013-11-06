@@ -19,8 +19,12 @@ Roadmap:
 ## Installation
 
 ```
+git clone https://github.com/jmervine/odbpm.git
+cd odbpm
+
+make unit # optional
+
 make
-make test
 sudo make install
 
 # unisntall
