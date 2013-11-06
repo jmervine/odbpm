@@ -9,7 +9,7 @@ This is currently in an aplha state. It's only been tested with a test repo on a
 TODO:
 - uninstall not implemented
 - global install not tested
-- some method of globally sourcing dependancies
+- some method of globally sourcing dependancies, commenting out dependancy functionality (which is untested anyway) until this is done
 - messaging or method RE including `~/.bin` to PATH
 
 Roadmap:
