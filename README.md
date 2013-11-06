@@ -9,6 +9,11 @@ This is currently in an aplha state. It's only been tested with a test repo on a
 TODO:
 - uninstall not implemented
 - global install not tested
+- some method of globally sourcing dependancies
+- messaging or method RE including `~/.bin` to PATH
+
+Roadmap:
+- registry of some kind
 
 ## Installation
 
