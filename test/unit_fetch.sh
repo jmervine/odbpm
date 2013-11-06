@@ -8,10 +8,9 @@ source ./lib/_utils.sh
 
 function cleanup { rm -rf /tmp/.odbpm.*; }
 function before  { cleanup; }
-#function after   { cleanup; }
+function after   { cleanup; }
 
 function run_tests {
-  #config[package]="odbpm-test-pkg"
   config[quiet]=true
 
   assert "_fetch_mktmp" "_fetch_mktmp: exists"

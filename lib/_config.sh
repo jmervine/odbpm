@@ -7,7 +7,7 @@ declare -A config=()
 # defaults and globals
 config[local]='.odbpm'
 config[global]='/usr/local/share'
-config[global_bin]='/usr/loca/bin'
+config[global_bin]='/usr/local/bin'
 config[local_bin]="${HOME}/.bin"
 config[method]='local'
 config[verbose]=false

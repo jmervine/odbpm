@@ -13,22 +13,29 @@ function _install {
   _verbose "=> ${config[tmp]}/${config[package]} ->"
   _verbose "     ${config[${config[method]}]}"
   cp -r "${config[tmp]}/${config[package]}" "${config[${config[method]}]}"
+
+  local working="${config[working]}/"
+  if [ "${config[method]}" = "global" ]; then
+    working=""
+  fi
+
   if test "${config[bin]}"; then
     _verbose "\nEnsuring execute permission."
-    _verbose "=> ${config[working]}/${config[${config[method]}]}/${config[package]}/${config[main]}"
-    chmod 755 "${config[working]}/${config[${config[method]}]}/${config[package]}/${config[main]}"
+    _verbose "=> $working${config[${config[method]}]}/${config[package]}/${config[main]}"
+    chmod 755 "$working${config[${config[method]}]}/${config[package]}/${config[main]}"
 
     _verbose "\nLinking executable."
-    _verbose "=> ${config[working]}/${config[${config[method]}]}/${config[package]}/${config[main]} ->"
+    _verbose "=> $working${config[${config[method]}]}/${config[package]}/${config[main]} ->"
     _verbose "     ${config["${config[method]}_bin"]}/${config[bin]}"
-    ln -s "${config[working]}/${config[${config[method]}]}/${config[package]}/${config[main]}" \
-          "${config["${config[method]}_bin"]}/${config[bin]}" 2> /dev/null || true
+    test -L "${config["${config[method]}_bin"]}/${config[bin]}" && rm -f "${config["${config[method]}_bin"]}/${config[bin]}"
+    ln -s "$working${config[${config[method]}]}/${config[package]}/${config[main]}" \
+          "${config["${config[method]}_bin"]}/${config[bin]}"
 
     _message "\n${config[package]} has been installed at:"
     _message " -> ${config["${config[method]}_bin"]}/${config[bin]}"
   else
     _message "\n${config[package]} has been installed at:"
-    _message " -> ${config[working]}/${config[${config[method]}]}/${config[package]}/${config[main]}"
+    _message " -> $working${config[${config[method]}]}/${config[package]}/${config[main]}"
   fi
 }
 

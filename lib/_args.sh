@@ -16,6 +16,10 @@ function _args_parse {
     esac
   done
   _args_validate
+  if [ "${config[method]}" = "global" ] && [[ $EUID -ne 0 ]]; then
+    _echoerr "Global install requires root."
+    exit 1
+  fi
 }
 
 function _args_validate {

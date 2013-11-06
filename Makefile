@@ -12,7 +12,7 @@ odbpm:
 unit: .PHONY
 	make test/unit_*.sh
 
-test/%: test/shunt.sh odbpm .PHONY
+test/%: test/shunt.sh .PHONY
 	$(shunt_cmd) ./$@
 
 clean:
