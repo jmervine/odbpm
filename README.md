@@ -33,7 +33,23 @@ sudo make uninstall
 ## Base Usage
 
 ```
-odbpm install jmervine/odbpm-test
+$ odbpm
+
+  Usage: odbpm ACTION [--global] REPO
+
+  Actions: install, uninstall, list
+
+  Options:
+  --global    -g   Install package globally.
+  --verbose   -v   Verbose debug messaging.
+  --quiet     -q   Silence all output.
+  --keep-tmp       Save install temp directory.
+
+  Examples:
+
+  odbpm install -g jmervine/odbpm-test
+  odbpm uninstall -g odbpm-test
+  odbpm list -g odbpm-test
 ```
 
 ## Creating Packages
