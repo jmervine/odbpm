@@ -10,7 +10,7 @@ TEMP_DIR=/tmp/.list.test
 #function after  { rm -rf $TEMP_DIR; }
 function before {
   # setup stubbed fetched package
-  mkdir -p $TEMP_DIR/.odbpm/pkg1 $TEMP_DIR/.odbpm/pkg2
+  mkdir -p $TEMP_DIR/.odbpm/pkg1 $TEMP_DIR/.odbpm/pkg2 $TEMP_DIR/.odbpm/bad_pkg
   echo "package: pkg_one" > $TEMP_DIR/.odbpm/pkg1/package.conf
   echo "package: pkg_two" > $TEMP_DIR/.odbpm/pkg2/package.conf
 }

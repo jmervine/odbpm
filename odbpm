@@ -23,23 +23,24 @@ __args=($@)
 function _args_parse {
   for arg in "${__args[@]}"; do
     case "$arg" in
-      -g|--global)       config[method]='global';;
-      -v|--verbose)      config[verbose]=true;;
-      -q|--quiet)        config[quiet]=true;;
-      --keep-tmp)        config[keep_tmp]=true;;
-      install|uninstall) config[action]=$arg;;
-      *)                 config[repo]=$arg;
+      -g|--global)            config[method]='global';;
+      -v|--verbose)           config[verbose]=true;;
+      -q|--quiet)             config[quiet]=true;;
+      --keep-tmp)             config[keep_tmp]=true;;
+      install|uninstall|list) config[action]=$arg;;
+      *)                      config[repo]=$arg;
     esac
   done
   _args_validate
-  if [ "${config[method]}" = "global" ] && [[ $EUID -ne 0 ]]; then
+  if [ "${config[method]}" = "global" ] && [[ $EUID -ne 0 ]] && [ "${config[action]}" != "list" ]; then
     _echoerr "Global install requires root."
     exit 1
   fi
+  config[working]="`pwd`"
 }
 
 function _args_validate {
-  if ! test "${config[action]}" || ! test "${config[repo]}"; then
+  if ( ! test "${config[action]}" || ! test "${config[repo]}" ) && [ "${config[action]}" != "list" ]; then
     _args_usage
   else
     return 0
@@ -50,7 +51,7 @@ function _args_usage {
   echo "
   Usage: `basename -- "$0"` ACTION [--global] REPO
 
-  Actions: install, uninstall
+  Actions: install, uninstall, list
 
   Options:
   --global    -g   Install package globally.
@@ -73,9 +74,9 @@ declare -A config=()
 
 # defaults and globals
 config[local]='.odbpm'
-config[global]='/usr/local/share'
-config[global_bin]='/usr/local/bin'
 config[local_bin]="${HOME}/.bin"
+config[global]='/usr/local/share/odbpm'
+config[global_bin]='/usr/local/bin'
 config[method]='local'
 config[verbose]=false
 config[quiet]=false
@@ -83,7 +84,7 @@ config[keep_tmp]=false
 
 function _configure {
   if ! test -f "$1"; then
-    _echoerr "Configuration file missing.\n"
+    _echoerr "Configuration file missing ($1).\n"
     exit 1
   fi
   local file="$1"
@@ -112,7 +113,6 @@ function _fetch_cleanup {
   rm -rf "${config[tmp]}"
 }
 function _fetch_repo {
-  config[working]="`pwd`"
   local repo="${config[repo]}"
   local version=master
   local regex='#'
@@ -164,6 +164,7 @@ function _install {
   _verbose "\nMoving package."
   _verbose "=> ${config[tmp]}/${config[package]} ->"
   _verbose "     ${config[${config[method]}]}"
+  mkdir -p "${config[${config[method]}]}"
   cp -r "${config[tmp]}/${config[package]}" "${config[${config[method]}]}"
 
   local working="${config[working]}/"
@@ -192,6 +193,26 @@ function _install {
 }
 
 
+# List Functions
+# file: ./lib/_list.sh
+################################################################################
+function _list {
+  echo "Installed packages:"
+  local lib="${config["${config[method]}"]}"
+  if [ "${config[method]}" != "global" ]; then
+    lib="${config[working]}/$lib"
+  fi
+  local found=false
+  for d in $(find $lib -maxdepth 1 -type d); do
+    if [ "$d" != "$lib" ] && test -f "$d/package.conf"; then
+      _configure "$d/package.conf"
+      found=true
+      echo " - ${config[package]}"
+    fi
+  done
+  if ! $found; then echo "No packages found."; fi
+}
+
 # Uninstall Functions
 # file: ./lib/_uninstall.sh
 ################################################################################
@@ -200,7 +221,7 @@ function _uninstall {
   local lib="${config[${config[method]}]}"
   local bin="${config["${config[method]}_bin"]}"
   if [ "${config[method]}" != "global" ]; then
-    lib="`pwd`/$lib"
+    lib="${config[working]}/$lib"
   fi
   _message "Removing $repo:"
   if test -d $lib/$repo; then
@@ -250,7 +271,9 @@ case "${config[action]}" in
     fi
     ;;
   uninstall)
-    _uninstall;; # Uninstall
+    _uninstall;;
+  list)
+    _list;;
   *)
     _args_usage
 esac

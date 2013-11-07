@@ -7,16 +7,16 @@ __args=($@)
 function _args_parse {
   for arg in "${__args[@]}"; do
     case "$arg" in
-      -g|--global)       config[method]='global';;
-      -v|--verbose)      config[verbose]=true;;
-      -q|--quiet)        config[quiet]=true;;
-      --keep-tmp)        config[keep_tmp]=true;;
-      install|uninstall) config[action]=$arg;;
-      *)                 config[repo]=$arg;
+      -g|--global)            config[method]='global';;
+      -v|--verbose)           config[verbose]=true;;
+      -q|--quiet)             config[quiet]=true;;
+      --keep-tmp)             config[keep_tmp]=true;;
+      install|uninstall|list) config[action]=$arg;;
+      *)                      config[repo]=$arg;
     esac
   done
   _args_validate
-  if [ "${config[method]}" = "global" ] && [[ $EUID -ne 0 ]]; then
+  if [ "${config[method]}" = "global" ] && [[ $EUID -ne 0 ]] && [ "${config[action]}" != "list" ]; then
     _echoerr "Global install requires root."
     exit 1
   fi
@@ -24,7 +24,7 @@ function _args_parse {
 }
 
 function _args_validate {
-  if ! test "${config[action]}" || ! test "${config[repo]}"; then
+  if ( ! test "${config[action]}" || ! test "${config[repo]}" ) && [ "${config[action]}" != "list" ]; then
     _args_usage
   else
     return 0

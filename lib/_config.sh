@@ -6,9 +6,9 @@ declare -A config=()
 
 # defaults and globals
 config[local]='.odbpm'
-config[global]='/usr/local/share'
-config[global_bin]='/usr/local/bin'
 config[local_bin]="${HOME}/.bin"
+config[global]='/usr/local/share/odbpm'
+config[global_bin]='/usr/local/bin'
 config[method]='local'
 config[verbose]=false
 config[quiet]=false

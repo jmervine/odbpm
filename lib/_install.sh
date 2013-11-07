@@ -12,6 +12,7 @@ function _install {
   _verbose "\nMoving package."
   _verbose "=> ${config[tmp]}/${config[package]} ->"
   _verbose "     ${config[${config[method]}]}"
+  mkdir -p "${config[${config[method]}]}"
   cp -r "${config[tmp]}/${config[package]}" "${config[${config[method]}]}"
 
   local working="${config[working]}/"

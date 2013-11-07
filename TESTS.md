@@ -40,7 +40,7 @@ Total: 7 Passed: 7 Failed: 0 Duration: 0 Seconds
 12. [assert_stderr] _fetch_repo: fail on bad repo passed
 
 
-Total: 12 Passed: 12 Failed: 0 Duration: 5 Seconds
+Total: 12 Passed: 12 Failed: 0 Duration: 4 Seconds
 
 (Running ./test/unit_install.sh from: /home/jmervine/Development/odbpm)
 
@@ -55,7 +55,7 @@ Total: 12 Passed: 12 Failed: 0 Duration: 5 Seconds
 9. [assert_link] _install: create bin link passed
 
 
-Total: 9 Passed: 9 Failed: 0 Duration: 0 Seconds
+Total: 9 Passed: 9 Failed: 0 Duration: 1 Seconds
 
 (Running ./test/unit_list.sh from: /home/jmervine/Development/odbpm)
 
