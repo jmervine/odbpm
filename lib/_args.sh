@@ -43,9 +43,11 @@ function _args_usage {
   --quiet     -q   Silence all output.
   --keep-tmp       Save install temp directory.
 
-  Example:
+  Examples:
 
   `basename -- "$0"` install -g jmervine/odbpm-test
+  `basename -- "$0"` uninstall -g odbpm-test
+  `basename -- "$0"` list -g odbpm-test
   "
   exit 0
 }
