@@ -7,7 +7,7 @@ function _uninstall {
   local lib="${config[${config[method]}]}"
   local bin="${config["${config[method]}_bin"]}"
   if [ "${config[method]}" != "global" ]; then
-    lib="`pwd`/$lib"
+    lib="${config[working]}/$lib"
   fi
   _message "Removing $repo:"
   if test -d $lib/$repo; then

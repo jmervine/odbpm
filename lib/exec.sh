@@ -14,7 +14,9 @@ case "${config[action]}" in
     fi
     ;;
   uninstall)
-    _uninstall;; # Uninstall
+    _uninstall;;
+  list)
+    _list;;
   *)
     _args_usage
 esac

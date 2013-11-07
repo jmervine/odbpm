@@ -13,7 +13,6 @@ function _fetch_cleanup {
   rm -rf "${config[tmp]}"
 }
 function _fetch_repo {
-  config[working]="`pwd`"
   local repo="${config[repo]}"
   local version=master
   local regex='#'

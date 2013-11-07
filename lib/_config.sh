@@ -16,7 +16,7 @@ config[keep_tmp]=false
 
 function _configure {
   if ! test -f "$1"; then
-    _echoerr "Configuration file missing.\n"
+    _echoerr "Configuration file missing ($1).\n"
     exit 1
   fi
   local file="$1"

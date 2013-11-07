@@ -20,6 +20,7 @@ function _args_parse {
     _echoerr "Global install requires root."
     exit 1
   fi
+  config[working]="`pwd`"
 }
 
 function _args_validate {
@@ -34,7 +35,7 @@ function _args_usage {
   echo "
   Usage: `basename -- "$0"` ACTION [--global] REPO
 
-  Actions: install, uninstall
+  Actions: install, uninstall, list
 
   Options:
   --global    -g   Install package globally.
