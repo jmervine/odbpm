@@ -9,8 +9,8 @@ odbpm:
 	cat ./lib/exec.sh >> odbpm
 	chmod 755 odbpm
 
-unit: .PHONY
-	make test/unit_*.sh
+unit: test/shunt.sh .PHONY
+	$(shunt_cmd) ./test/unit_*.sh
 
 test/%: test/shunt.sh .PHONY
 	$(shunt_cmd) ./$@
@@ -35,17 +35,11 @@ update: uninstall install
 ensure_root:
 	@if [ "$$(id -u)" = "0" ]; then return 0; else echo "ERROR: Requires root."; return 1; fi
 
-TESTS.md: .PHONY
+TESTS.md: test/shunt.sh .PHONY
 	@echo "# Unit Test Output" > ./TESTS.md
 	@echo '' >> TESTS.md
 	@echo '```' >> TESTS.md
-	@$(shunt_cmd) --plain ./test/unit_args.sh      | tee -a ./TESTS.md
-	@$(shunt_cmd) --plain ./test/unit_config.sh    | tee -a ./TESTS.md
-	@$(shunt_cmd) --plain ./test/unit_fetch.sh     | tee -a ./TESTS.md
-	@$(shunt_cmd) --plain ./test/unit_install.sh   | tee -a ./TESTS.md
-	@$(shunt_cmd) --plain ./test/unit_list.sh      | tee -a ./TESTS.md
-	@$(shunt_cmd) --plain ./test/unit_uninstall.sh | tee -a ./TESTS.md
-	@$(shunt_cmd) --plain ./test/unit_utils.sh     | tee -a ./TESTS.md
+	@$(shunt_cmd) --plain ./test/unit_*.sh      | tee -a ./TESTS.md
 	@echo '```' >> TESTS.md
 
 .PHONY:
