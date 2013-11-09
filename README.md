@@ -52,6 +52,8 @@ $ odbpm
   odbpm list -g odbpm-test
 ```
 
+<iframe src="http://showterm.io/1b57275efd9970d596786" width="725" height="500" />
+
 ## Creating Packages
 
 > Sample Package:
