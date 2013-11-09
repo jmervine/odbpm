@@ -52,7 +52,7 @@ $ odbpm
   odbpm list -g odbpm-test
 ```
 
-#### [Usage Showterm](http://showterm.io/1b57275efd9970d596786)
+#### [Usage Showterm](http://showterm.io/1b57275efd9970d596786#fast)
 
 ## Creating Packages
 
