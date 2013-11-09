@@ -65,6 +65,6 @@ Your `package.conf` configuration file should contain the follow three entries;
 ``` bash
 package:      shunt     # package name
 main:         shunt.sh  # main source file
-bin:          shunt.sh  # executable link to main
-                        # Without bin, no link will be created.
+bin:          shunt     # executable link to main
+                        # without bin, main will be used.
 ```

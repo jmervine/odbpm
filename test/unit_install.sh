@@ -6,8 +6,7 @@ source ./lib/_install.sh
 source ./lib/_utils.sh
 source ./lib/_config.sh
 
-function after  { rm -rf /tmp/.install.test /tmp/.install.global.test; }
-function before {
+function _setup {
   # setup stubbed fetched package
   mkdir -p /tmp/.install.test/test-pkg
   mkdir -p /tmp/.install.test/bin
@@ -16,6 +15,9 @@ function before {
   echo -e "#!/usr/bin/env bash\necho test-pkg\n" > test-pkg/test.sh
   touch test-pkg/package.conf
 }
+function _clean { rm -rf /tmp/.install.test /tmp/.install.global.test; }
+function before { _setup; }
+function after  { _clean; }
 
 function run_tests {
   # stub config
@@ -45,5 +47,10 @@ function run_tests {
   assert "_install" "_install: runs with global"
   assert_file "/tmp/.install.global.test/test-pkg/test.sh" "_install: global install"
   assert_link "/tmp/.install.global.test/bin/test" "_install: create bin link"
+
+  _clean; _setup;
+  unset config[bin]
+  assert "_install" "_install: runs with out config[bin]"
+  assert_link "/tmp/.install.global.test/bin/test.sh" "_install: create bin link"
 }
 # vim: ft=sh:
