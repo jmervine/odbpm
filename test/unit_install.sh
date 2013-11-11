@@ -52,5 +52,11 @@ function run_tests {
   unset config[bin]
   assert "_install" "_install: runs with out config[bin]"
   assert_link "/tmp/.install.global.test/bin/test.sh" "_install: create bin link"
+
+  _clean; _setup;
+  config[bin]="test.sh test"
+  assert "_install" "_install: runs with multiple files in config[bin]"
+  assert_link "/tmp/.install.global.test/bin/test.sh" "_install: create first bin link"
+  assert_link "/tmp/.install.global.test/bin/test" "_install: create second bin link"
 }
 # vim: ft=sh:

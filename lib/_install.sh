@@ -27,14 +27,18 @@ function _install {
   _verbose "=> $working${config[${config[method]}]}/${config[package]}/${config[main]}"
   chmod 755 "$working${config[${config[method]}]}/${config[package]}/${config[main]}"
 
+  declare -a __bins=( $( echo "${config[bin]}" ) )
   _verbose "\nLinking executable."
-  _verbose "=> $working${config[${config[method]}]}/${config[package]}/${config[main]} ->"
-  _verbose "     ${config["${config[method]}_bin"]}/${config[bin]}"
-  test -L "${config["${config[method]}_bin"]}/${config[bin]}" && rm -f "${config["${config[method]}_bin"]}/${config[bin]}"
-  ln -s "$working${config[${config[method]}]}/${config[package]}/${config[main]}" \
-        "${config["${config[method]}_bin"]}/${config[bin]}"
-
+  for __bin in "${__bins[@]}"; do
+    _verbose "=> $working${config[${config[method]}]}/${config[package]}/${config[main]} ->"
+    _verbose "     ${config["${config[method]}_bin"]}/$__bin"
+    test -L "${config["${config[method]}_bin"]}/$__bin" && rm -f "${config["${config[method]}_bin"]}/$__bin"
+    ln -s "$working${config[${config[method]}]}/${config[package]}/${config[main]}" \
+          "${config["${config[method]}_bin"]}/$__bin"
+  done
   _message "\n${config[package]} has been installed at:"
-  _message " -> ${config["${config[method]}_bin"]}/${config[bin]}"
+  for e in "$execs"; do
+    _message " -> ${config["${config[method]}_bin"]}/$__bin"
+  done
 }
 
