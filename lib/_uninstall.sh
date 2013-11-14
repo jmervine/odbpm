@@ -15,7 +15,7 @@ function _uninstall {
     _message " -> $lib/$repo"
     rm -rf $lib/$repo
   else
-    repo="`echo $repo | awk -F'/' '{ print $2 }' | xargs`"
+    repo="$(echo $repo | awk -F'/' '{ print $2 }' | xargs)"
     if test -d $lib/$repo; then
       _configure "$lib/$repo/package.conf"
       _message " -> $lib/$repo"

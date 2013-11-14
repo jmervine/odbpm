@@ -22,9 +22,9 @@ function _configure {
   local file="$1"
   while read line; do
     if test "$line" && (! [[ "$line" =~ ^\# ]]); then
-      local key=`echo $line | awk -F':' '{ print $1 }' | xargs`
-      local val=`echo $line | awk -F':' '{ print $2 }' | xargs`
-      val=`echo $val | sed 's/\#.*$//' | xargs` # strip trailing comments
+      local key="$(echo $line | awk -F':' '{ print $1 }' | xargs)"
+      local val="$(echo $line | awk -F':' '{ print $2 }' | xargs)"
+      val="$(echo $val | sed 's/\#.*$//' | xargs)" # strip trailing comments
       config[$key]=$val
     fi
   done < $file

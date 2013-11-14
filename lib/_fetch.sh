@@ -17,10 +17,10 @@ function _fetch_repo {
   local version=master
   local regex='#'
   if [[ "$repo" =~ $regex ]]; then
-    version=`echo $repo | awk -F'#' '{ print $2 }' | xargs`
-    repo=`echo $repo | awk -F'#' '{ print $1 }' | xargs`
+    version="$(echo $repo | awk -F'#' '{ print $2 }' | xargs)"
+    repo="$(echo $repo | awk -F'#' '{ print $1 }' | xargs)"
   fi
-  local package=`echo $repo | awk -F'/' '{ print $2 }' | xargs`
+  local package="$(echo $repo | awk -F'/' '{ print $2 }' | xargs)"
   test -d "${config[tmp]}" || _fetch_mktmp
   cd "${config[tmp]}"
 

@@ -10,13 +10,13 @@ function after {
 }
 
 function run_tests {
-  assert_equal "`_message foo`" "foo" "_message: echo passed string"
+  assert_equal "$(_message foo)" "foo" "_message: echo passed string"
 
   config[verbose]=false
-  refute_equal "`_verbose foo`" "foo" "_verbose: false ignores passed string"
+  refute_equal "$(_verbose foo)" "foo" "_verbose: false ignores passed string"
 
   config[verbose]=true
-  assert_equal "`_verbose foo`" "foo" "_verbose: true echos passed string"
+  assert_equal "$(_verbose foo)" "foo" "_verbose: true echos passed string"
 
   assert_stderr "_echoerr foo" "_echoerr: echo on stderr"
 

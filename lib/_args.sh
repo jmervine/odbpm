@@ -20,7 +20,7 @@ function _args_parse {
     _echoerr "Global install requires root."
     exit 1
   fi
-  config[working]="`pwd`"
+  config[working]="$(pwd)"
 }
 
 function _args_validate {
@@ -33,7 +33,7 @@ function _args_validate {
 
 function _args_usage {
   echo "
-  Usage: `basename -- "$0"` ACTION [--global] REPO
+  Usage: $(basename -- "$0") ACTION [--global] REPO
 
   Actions: install, uninstall, list
 
@@ -45,9 +45,9 @@ function _args_usage {
 
   Examples:
 
-  `basename -- "$0"` install -g jmervine/odbpm-test
-  `basename -- "$0"` uninstall -g odbpm-test
-  `basename -- "$0"` list -g odbpm-test
+  $(basename -- "$0") install -g jmervine/odbpm-test
+  $(basename -- "$0") uninstall -g odbpm-test
+  $(basename -- "$0") list -g odbpm-test
   "
   exit 0
 }
