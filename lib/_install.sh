@@ -2,6 +2,19 @@
 # Install Functions
 # file: ./lib/_install.sh
 ################################################################################
+function _install_with_deps {
+  _install
+  local deps=(${config[deps]})
+  if test "$deps"; then
+    local parent_repo="${config[repo]}"
+    for dep in "${deps}"; do
+      config[repo]="$dep"
+      _fetch_repo
+      _install
+    done
+  fi
+}
+
 function _install {
   if ! test -d "${config[tmp]}"; then
     _echoerr "Something went wrong, tmp directory not found."

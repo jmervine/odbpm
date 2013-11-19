@@ -36,7 +36,7 @@ function _args_parse {
     _echoerr "Global install requires root."
     exit 1
   fi
-  config[working]="`pwd`"
+  config[working]="$(pwd)"
 }
 
 function _args_validate {
@@ -49,7 +49,7 @@ function _args_validate {
 
 function _args_usage {
   echo "
-  Usage: `basename -- "$0"` ACTION [--global] REPO
+  Usage: $(basename -- "$0") ACTION [--global] REPO
 
   Actions: install, uninstall, list
 
@@ -61,9 +61,9 @@ function _args_usage {
 
   Examples:
 
-  `basename -- "$0"` install -g jmervine/odbpm-test
-  `basename -- "$0"` uninstall -g odbpm-test
-  `basename -- "$0"` list -g odbpm-test
+  $(basename -- "$0") install -g jmervine/odbpm-test
+  $(basename -- "$0") uninstall -g odbpm-test
+  $(basename -- "$0") list -g odbpm-test
   "
   exit 0
 }
@@ -92,9 +92,11 @@ function _configure {
   local file="$1"
   while read line; do
     if test "$line" && (! [[ "$line" =~ ^\# ]]); then
-      local key=`echo $line | awk -F':' '{ print $1 }' | xargs`
-      local val=`echo $line | awk -F':' '{ print $2 }' | xargs`
-      val=`echo $val | sed 's/\#.*$//' | xargs` # strip trailing comments
+      local key="$(echo $line | awk -F':' '{ print $1 }' | xargs)"
+      local val="$(echo $line | awk -F':' '{ print $2 }' | xargs)"
+      if [ "$key" != "deps" ]; then
+        val="$(echo $val | sed 's/\#.*$//' | xargs)" # strip trailing comments
+      fi
       config[$key]=$val
     fi
   done < $file
@@ -119,10 +121,10 @@ function _fetch_repo {
   local version=master
   local regex='#'
   if [[ "$repo" =~ $regex ]]; then
-    version=`echo $repo | awk -F'#' '{ print $2 }' | xargs`
-    repo=`echo $repo | awk -F'#' '{ print $1 }' | xargs`
+    version="$(echo $repo | awk -F'#' '{ print $2 }' | xargs)"
+    repo="$(echo $repo | awk -F'#' '{ print $1 }' | xargs)"
   fi
-  local package=`echo $repo | awk -F'/' '{ print $2 }' | xargs`
+  local package="$(echo $repo | awk -F'/' '{ print $2 }' | xargs)"
   test -d "${config[tmp]}" || _fetch_mktmp
   cd "${config[tmp]}"
 
@@ -156,40 +158,64 @@ function _fetch_repo {
 # Install Functions
 # file: ./lib/_install.sh
 ################################################################################
+function _install_with_deps {
+  _install
+  local deps=(${config[deps]})
+  if test "$deps"; then
+    local parent_repo="${config[repo]}"
+    for dep in "${deps}"; do
+      config[repo]="$dep"
+      _fetch_repo
+      _install
+    done
+  fi
+}
+
 function _install {
   if ! test -d "${config[tmp]}"; then
     _echoerr "Something went wrong, tmp directory not found."
     exit 1
   fi
-  if [ "${config[method]}" = "local" ]; then _make_local; fi
+
+  local method="${config[method]}"
+  local dest="${config[$method]}"
+  local package="${config[package]}"
+  local main="${config[main]}"
+  local bin="${config["${method}_bin"]}"
+
+  if [ "$method" = "local" ]; then _make_local; fi
 
   _verbose "\nMoving package."
-  _verbose "=> ${config[tmp]}/${config[package]} ->"
-  _verbose "     ${config[${config[method]}]}"
-  mkdir -p "${config[${config[method]}]}"
-  cp -r "${config[tmp]}/${config[package]}" "${config[${config[method]}]}"
+  _verbose "=> ${config[tmp]}/$package ->"
+  _verbose "     $method"
+  mkdir -p "$dest"
+  cp -r "${config[tmp]}/$package" "$dest"
 
-  local working="${config[working]}/"
-  if [ "${config[method]}" = "global" ]; then
-    working=""
+  local working="${config[working]}/$dest"
+  if [ "$dest" = "global" ]; then
+    working="$dest"
   fi
 
   if ! test "${config[bin]}"; then
-    config[bin]="${config[main]}"
+    config[bin]="$main"
   fi
   _verbose "\nEnsuring execute permission."
-  _verbose "=> $working${config[${config[method]}]}/${config[package]}/${config[main]}"
-  chmod 755 "$working${config[${config[method]}]}/${config[package]}/${config[main]}"
+  _verbose "=> $working/$package/$main"
+  chmod 755 "$working/$package/$main"
 
+  declare -a __bins=( $( echo "${config[bin]}" ) )
   _verbose "\nLinking executable."
-  _verbose "=> $working${config[${config[method]}]}/${config[package]}/${config[main]} ->"
-  _verbose "     ${config["${config[method]}_bin"]}/${config[bin]}"
-  test -L "${config["${config[method]}_bin"]}/${config[bin]}" && rm -f "${config["${config[method]}_bin"]}/${config[bin]}"
-  ln -s "$working${config[${config[method]}]}/${config[package]}/${config[main]}" \
-        "${config["${config[method]}_bin"]}/${config[bin]}"
-
-  _message "\n${config[package]} has been installed at:"
-  _message " -> ${config["${config[method]}_bin"]}/${config[bin]}"
+  for __bin in "${__bins[@]}"; do
+    __bin="$bin/$__bin"
+    _verbose "=> $working/$package/$main ->"
+    _verbose "     $__bin"
+    test -L "$__bin" && rm -f "$__bin"
+    ln -s "$working/$package/$main" "$__bin"
+  done
+  _message "\n$package has been installed at:"
+  for e in "$execs"; do
+    _message " -> $__bin"
+  done
 }
 
 
@@ -229,7 +255,7 @@ function _uninstall {
     _message " -> $lib/$repo"
     rm -rf $lib/$repo
   else
-    repo="`echo $repo | awk -F'/' '{ print $2 }' | xargs`"
+    repo="$(echo $repo | awk -F'/' '{ print $2 }' | xargs)"
     if test -d $lib/$repo; then
       _configure "$lib/$repo/package.conf"
       _message " -> $lib/$repo"
@@ -264,8 +290,8 @@ _args_parse # Parse command line arguments.
 
 case "${config[action]}" in
   install)
-    _fetch_repo # Fetch package repository.
-    _install    # Install fetched package.
+    _fetch_repo        # Fetch package repository.
+    _install_with_deps # Install fetched package.
     if ! ${config[keep_tmp]}; then
       _fetch_cleanup # Remove package temp.
     fi

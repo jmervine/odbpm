@@ -24,7 +24,9 @@ function _configure {
     if test "$line" && (! [[ "$line" =~ ^\# ]]); then
       local key="$(echo $line | awk -F':' '{ print $1 }' | xargs)"
       local val="$(echo $line | awk -F':' '{ print $2 }' | xargs)"
-      val="$(echo $val | sed 's/\#.*$//' | xargs)" # strip trailing comments
+      if [ "$key" != "deps" ]; then
+        val="$(echo $val | sed 's/\#.*$//' | xargs)" # strip trailing comments
+      fi
       config[$key]=$val
     fi
   done < $file
